@@ -69,9 +69,7 @@ juicer_version="1.5.6"
 ## Set the following variables to work with your system
 
 # Aiden Lab specific check
-# isRice=$(hostname | awk '{if ($1~/rice/){print 1}else {print 0}}')
-# isBCM=$(hostname | awk '{if ($1~/bcm/){print 1}else {print 0}}')
-# isVoltron=0
+
 ## path additionals, make sure paths are correct for your system
 ## use cluster load commands
 # if [ $isRice -eq 1 ] 
@@ -118,6 +116,8 @@ juicer_version="1.5.6"
 
 # Juicer directory, contains scripts/, references/, and restriction_sites/
 # can also be set in options via -D
+isRice=$(hostname | awk '{if ($1~/rice/){print 1}else {print 0}}')
+isBCM=$(hostname | awk '{if ($1~/bcm/){print 1}else {print 0}}')
 isVoltron=0
 juiceDir="~/juicer"
 # default queue, can also be set in options via -q
@@ -599,7 +599,7 @@ CNTLIG`
 		#SBATCH -n 1
 		#SBATCH -c $threads
 		#SBATCH --ntasks=1
-		#SBATCH --mem-per-cpu=$alloc_mem
+        #SBATCH --mem=$alloc_mem
 		#SBATCH -J "${groupname}_align1_${jname}"
 		#SBATCH --threads-per-core=1		
 		${load_bwa}
@@ -644,7 +644,7 @@ ALGNR1`
 		#SBATCH -n 1
 		#SBATCH -c $threads
 		#SBATCH --ntasks=1
-		#SBATCH --mem-per-cpu=$alloc_mem
+		#SBATCH --mem=$alloc_mem
 		#SBATCH -J "${groupname}_align2_${jname}"
 		#SBATCH --threads-per-core=1		
 		${load_bwa}
@@ -686,7 +686,7 @@ ALGNR2`
 		#SBATCH -p $long_queue
 		#SBATCH -o $debugdir/merge-%j.out
 		#SBATCH -e $debugdir/merge-%j.err
-		#SBATCH --mem-per-cpu=14G
+		#SBATCH --mem=14G
 		#SBATCH -t $queue_time
 		#SBATCH -c 8 
 		#SBATCH --ntasks=1
@@ -938,7 +938,7 @@ DEDUPGUARD`
     jid=`sbatch <<- DEDUP | egrep -o -e "\b[0-9]+$"
 	#!/bin/bash -l
 	#SBATCH -p $queue
-	#SBATCH --mem-per-cpu=2G
+	#SBATCH --mem=2G
 	#SBATCH -o $debugdir/dedup-%j.out
 	#SBATCH -e $debugdir/dedup-%j.err
 	#SBATCH -t $queue_time
@@ -1003,7 +1003,7 @@ then
     jid=`sbatch <<- FINCLN1 | egrep -o -e "\b[0-9]+$" 
 	#!/bin/bash
 	#SBATCH -p $queue
-	#SBATCH --mem-per-cpu=2G
+	#SBATCH --mem=2G
 	#SBATCH -o $debugdir/fincln1-%j.out
 	#SBATCH -e $debugdir/fincln1-%j.err
 	#SBATCH -t 1200
@@ -1033,7 +1033,7 @@ if [ -z $postproc ]
 	#SBATCH -t $queue_time
 	#SBATCH -c 1
 	#SBATCH --ntasks=1
-	#SBATCH --mem-per-cpu=1G
+	#SBATCH --mem=1G
 	#SBATCH -J "${groupname}_dupcheck"
 	${sbatch_wait}
 
@@ -1052,7 +1052,7 @@ DUPCHECK`
 		#SBATCH -t $long_queue_time
 		#SBATCH -c 1
 		#SBATCH --ntasks=1
-		#SBATCH --mem-per-cpu=6G
+		#SBATCH --mem=6G
 		#SBATCH -J "${groupname}_stats"
 		${sbatch_wait}
 
@@ -1093,7 +1093,7 @@ STATS`
 	#SBATCH -t $long_queue_time
 	#SBATCH -c 1
 	#SBATCH --ntasks=1
-	#SBATCH --mem-per-cpu=32G
+	#SBATCH --mem=32G
 	#SBATCH -J "${groupname}_hic"
 	#SBATCH -d $dependstats
 	${load_java}
@@ -1123,7 +1123,7 @@ HIC`
 	#SBATCH -t $long_queue_time
 	#SBATCH -c 1
 	#SBATCH --ntasks=1
-	#SBATCH --mem-per-cpu=32G
+	#SBATCH --mem=32G
 	#SBATCH -J "${groupname}_hic30"
 	#SBATCH -d ${dependstats}
 	${load_java}
@@ -1158,7 +1158,7 @@ then
     jid=`sbatch <<- HICCUPS | egrep -o -e "\b[0-9]+$"
 	#!/bin/bash -l
 	#SBATCH -p $queue
-	#SBATCH --mem-per-cpu=2G
+	#SBATCH --mem=2G
 	${sbatch_req}
 	#SBATCH -o $debugdir/hiccups_wrap-%j.out
 	#SBATCH -e $debugdir/hiccups_wrap-%j.err
@@ -1187,7 +1187,7 @@ fi
 jid=`sbatch <<- ARROWS | egrep -o -e "\b[0-9]+$"
 	#!/bin/bash -l
 	#SBATCH -p $queue
-	#SBATCH --mem-per-cpu=8G
+	#SBATCH --mem=8G
 	#SBATCH -o $debugdir/arrowhead_wrap-%j.out
 	#SBATCH -e $debugdir/arrowhead_wrap-%j.err
 	#SBATCH -t $long_queue_time
@@ -1209,7 +1209,7 @@ dependarrows="${dependhiccups}:$jid"
 jid=`sbatch <<- FINCLN1 | egrep -o -e "\b[0-9]+$"
 	#!/bin/bash
 	#SBATCH -p $queue
-	#SBATCH --mem-per-cpu=2G
+	#SBATCH --mem=2G
 	#SBATCH -o $debugdir/fincln-%j.out
 	#SBATCH -e $debugdir/fincln-%j.err
 	#SBATCH -t 1200
