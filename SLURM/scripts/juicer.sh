@@ -421,6 +421,9 @@ else
     read1=${splitdir}"/*${read1str}*.fastq"
 fi
 
+##DEBUG
+echo "About to run HEADER"
+
 # Add header containing command executed and timestamp:
 jid=`sbatch <<- HEADER | egrep -o -e "\b[0-9]+$"
 	#!/bin/bash -l
@@ -464,6 +467,9 @@ if [ -f $errorfile ]
 then
     rm $errorfile
 fi
+
+##DEBUG
+echo "Line 472: About to run split and align"
 
 # Not in merge, dedup,  or final stage, i.e. need to split and align files.
 if [ -z $merge ] && [ -z $final ] && [ -z $dedup ] && [ -z $postproc ]
@@ -573,6 +579,9 @@ SPLITEND`
             usegzip=1
 	fi
 
+##DEBUG
+echo "Line 583: About to run ligation count"
+
 	# count ligations
 	jid=`sbatch <<- CNTLIG |  egrep -o -e "\b[0-9]+$"
 		#!/bin/bash -l
@@ -589,6 +598,9 @@ CNTLIG`
 	dependcount="$jid"
 	# align read1 fastq
 	touchfile1=${tmpdir}/${jname}1
+
+##DEBUG
+echo "Line 603: About to align"
 
 	jid=`sbatch <<- ALGNR1 | egrep -o -e "\b[0-9]+$"
 		#!/bin/bash -l
@@ -631,6 +643,9 @@ CNTLIG`
 		fi
 		date
 ALGNR1`
+
+##DEBUG
+echo "Line 643: About to align read2"
 
 	dependalign="afterok:$jid:$dependcount"
 	# align read2 fastq
@@ -678,6 +693,9 @@ ALGNR1`
 ALGNR2`
 
 	dependalign="$dependalign:$jid"
+
+##DEBUG
+echo "Line 698: About to merge"
 
 	touchfile3=${tmpdir}/${jname}3
 	# wait for top two, merge
@@ -813,6 +831,9 @@ MRGALL`
 	f=${TOUCH[$i]}
 	msg="***! Error in job ${ARRAY[$i]}  Type squeue -j ${JIDS[$i]} to see what happened"
 	
+##DEBUG
+echo "Line 835: About to check alignments"
+
 	# check that alignment finished successfully
 	jid=`sbatch <<- EOF
 		#!/usr/bin/bash
@@ -835,6 +856,9 @@ EOF`
 	dependmergecheck="${dependmerge}:${jid}"
     done
 fi  # Not in merge, dedup,  or final stage, i.e. need to split and align files.
+
+##DEBUG
+echo "Line 861: About to mrgsort"
 
 # Not in final, dedup, or postproc
 if [ -z $final ] && [ -z $dedup ] && [ -z $postproc ]
@@ -905,6 +929,9 @@ EOF`
     jid=$(echo $jid | egrep -o -e "\b[0-9]+$")
     dependmrgsrt="afterok:$jid"
 fi
+
+##DEBUG
+echo "Line 934: About to dedup"
 
 # Remove the duplicates from the big sorted file
 if [ -z $final ] && [ -z $postproc ]
