@@ -881,14 +881,14 @@ then
  #    else
 	# sbatch_time="#SBATCH -t 1440"
  #    fi
-    sbatch_time="#SBATCH -t 10080"
+
 
 
     jid=`sbatch <<- EOF
 		#!/usr/bin/bash
 		#SBATCH -o $debugdir/fragmerge-%j.out
 		#SBATCH -e $debugdir/fragmerge-%j.err
-		#SBATCH --mem=240G
+		#SBATCH --mem=64G
 		${sbatch_time}
 		#SBATCH -p $high_mem_queue
 		#SBATCH -c 8
