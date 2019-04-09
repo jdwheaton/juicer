@@ -127,6 +127,8 @@ queue_time="1200"
 long_queue="common"
 long_queue_time="3600"
 
+high_mem_queue="common-large"
+
 # size to split fastqs. adjust to match your needs. 4000000=1M reads per split
 # can also be changed via the -C flag
 splitsize=90000000
@@ -873,22 +875,22 @@ then
     # merge the sorted files into one giant file that is also sorted.      
     #jid=`sbatch <<- MRGSRT | egrep -o -e "\b[0-9]+$"
     
-    if [ $isVoltron -eq 1 ]
-    then  
-	sbatch_time="#SBATCH -t 10080"
-    else
-	sbatch_time="#SBATCH -t 1440"
-    fi
-
+ #    if [ $isVoltron -eq 1 ]
+ #    then  
+	# sbatch_time="#SBATCH -t 10080"
+ #    else
+	# sbatch_time="#SBATCH -t 1440"
+ #    fi
+    sbatch_time="#SBATCH -t 10080"
 
 
     jid=`sbatch <<- EOF
 		#!/usr/bin/bash
 		#SBATCH -o $debugdir/fragmerge-%j.out
 		#SBATCH -e $debugdir/fragmerge-%j.err
-		#SBATCH --mem 256000
+		#SBATCH --mem=240G
 		${sbatch_time}
-		#SBATCH -p $long_queue
+		#SBATCH -p $high_mem_queue
 		#SBATCH -c 8
 		#SBATCH -J "${groupname}_fragmerge"
 		${sbatch_wait}
