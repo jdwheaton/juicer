@@ -883,7 +883,7 @@ then
  #    else
 	# sbatch_time="#SBATCH -t 1440"
  #    fi
-
+    sbatch_time="#SBATCH -t 1440"
 
 
     jid=`sbatch <<- EOF
