@@ -113,12 +113,14 @@ juicer_version="1.5.6"
 #     long_queue="long"
 #     long_queue_time="10080"
 # fi
-
-# Juicer directory, contains scripts/, references/, and restriction_sites/
-# can also be set in options via -D
 isRice=$(hostname | awk '{if ($1~/rice/){print 1}else {print 0}}')
 isBCM=$(hostname | awk '{if ($1~/bcm/){print 1}else {print 0}}')
 isVoltron=0
+load_java="export PATH=/dscrhome/jdw54/.linuxbrew/bin:/dscrhome/jdw54/miniconda3/bin:/dscrhome/jdw54/miniconda2/bin:/opt/slurm/bin:/usr/lib64/qt-3.3/bin:/usr/local/bin:/bin:/usr/bin:/dscrhome/jdw54/sratoolkit.2.9.2-centos_linux64/bin:/dscrhome/jdw54/samtools/bin:/dscrhome/jdw54/bedtools2/bin:/dscrhome/jdw54/STAR/bin/Linux_x86_64_static:/dscrhome/jdw54/bowtie2-2.3.4.1-linux-x86_64"
+load_bwa="export PATH=$PATH:/dscrhome/jdw54/bwa-0.7.17"
+# Juicer directory, contains scripts/, references/, and restriction_sites/
+# can also be set in options via -D
+
 juiceDir="~/juicer"
 # default queue, can also be set in options via -q
 queue="scavenger"
