@@ -118,6 +118,7 @@ juicer_version="1.5.6"
 
 # Juicer directory, contains scripts/, references/, and restriction_sites/
 # can also be set in options via -D
+isVoltron=0
 juiceDir="~/juicer"
 # default queue, can also be set in options via -q
 queue="scavenger"
