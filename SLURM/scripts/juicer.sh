@@ -862,7 +862,7 @@ then
 		#!/usr/bin/bash
 		#SBATCH -o $debugdir/fragmerge-%j.out
 		#SBATCH -e $debugdir/fragmerge-%j.err
-		#SBATCH --mem 256000
+		#SBATCH --mem=64G
 		${sbatch_time}
 		#SBATCH -p $long_queue
 		#SBATCH -c 8
