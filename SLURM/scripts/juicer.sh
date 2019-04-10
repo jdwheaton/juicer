@@ -116,6 +116,13 @@ juicer_version="1.5.6"
 #     long_queue_time="10080"
 # fi
 
+isRice=0
+isBCM=0
+isVoltron=0
+
+load_bwa="export PATH=$PATH:/dscrhome/jdw54/bwa-0.7.17"
+load_java="export PATH=/dscrhome/jdw54/.linuxbrew/bin:$PATH"
+
 # Juicer directory, contains scripts/, references/, and restriction_sites/
 # can also be set in options via -D
 juiceDir="~/juicer"
@@ -145,7 +152,7 @@ topDir=$(pwd)
 # restriction enzyme, can also be set in options
 site="MboI"
 # genome ID, default to human, can also be set in options
-genomeID="hg19"
+genomeID="hg38"
 # normally both read ends are aligned with long read aligner; 
 # if one end is short, this is set                 
 shortreadend=0
