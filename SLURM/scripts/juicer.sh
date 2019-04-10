@@ -628,6 +628,7 @@ echo "Line 603: About to align"
 			if [ \$? -ne 0 ]
 			then
 				touch $errorfile
+                echo "Alignment failure"
 				exit 1
 			else
 				touch $touchfile1
@@ -639,6 +640,7 @@ echo "Line 603: About to align"
 			if [ \$? -ne 0 ]
 			then  
 				touch $errorfile
+                echo "Alignment failure"
 				exit 1
 			else
 				touch $touchfile1
@@ -676,6 +678,7 @@ echo "Line 643: About to align read2"
 			if [ \$? -ne 0 ]
 			then 
 				touch $errorfile
+                echo "Alignment failure"
 				exit 1
 			else
 				touch $touchfile2
@@ -687,6 +690,7 @@ echo "Line 643: About to align read2"
 			if [ \$? -ne 0 ]
 			then 
 				touch $errorfile
+                echo "Alignment failure"
 				exit 1
 			else
 				touch $touchfile2
