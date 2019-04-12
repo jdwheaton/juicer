@@ -125,7 +125,7 @@ load_java="export PATH=/dscrhome/jdw54/.linuxbrew/bin:$PATH"
 
 # Juicer directory, contains scripts/, references/, and restriction_sites/
 # can also be set in options via -D
-juiceDir="~/juicer"
+juiceDir="/dscrhome/jdw54/juicer"
 # default queue, can also be set in options via -q
 queue="scavenger"
 queue_time="1200"
@@ -152,7 +152,7 @@ topDir=$(pwd)
 # restriction enzyme, can also be set in options
 site="MboI"
 # genome ID, default to human, can also be set in options
-genomeID="hg38"
+genomeID="hg19"
 # normally both read ends are aligned with long read aligner; 
 # if one end is short, this is set                 
 shortreadend=0
