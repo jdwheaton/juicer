@@ -254,7 +254,7 @@ then
     case $genomeID in
 	mm9)	refSeq="${juiceDir}/references/Mus_musculus_assembly9_norandom.fasta";;
 	mm10)	refSeq="${juiceDir}/references/Mus_musculus_assembly10/v0/Mus_musculus_assembly10.fasta";;
-	hg38)	refSeq="${juiceDir}/references/Homo_sapiens_assembly38.fasta";;
+	hg38)	refSeq="${juiceDir}/references/hg38/hg38.fa";;
 	hg19)	refSeq="${juiceDir}/references/Homo_sapiens_assembly19.fasta";;
 	hg18)	refSeq="${juiceDir}/references/hg18.fasta";;
 	*)		echo "$usageHelp"
