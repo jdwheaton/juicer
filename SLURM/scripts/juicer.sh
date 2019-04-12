@@ -429,37 +429,37 @@ fi
 
 # Add header containing command executed and timestamp:
 jid=`sbatch <<- HEADER | egrep -o -e "\b[0-9]+$"
-#!/bin/bash -l
-#SBATCH -p $queue
-#SBATCH -t 2
-#SBATCH -c 1
-#SBATCH -o $debugdir/head-%j.out
-#SBATCH -e $debugdir/head-%j.err
-#SBATCH -J "${groupname}_cmd"
-date
-${load_bwa}
-${load_java}
+	#!/bin/bash -l
+	#SBATCH -p $queue
+	#SBATCH -t 2
+	#SBATCH -c 1
+	#SBATCH -o $debugdir/head-%j.out
+	#SBATCH -e $debugdir/head-%j.err
+	#SBATCH -J "${groupname}_cmd"
+	date
+	${load_bwa}
+	${load_java}
 
-# Experiment description
-if [ -n "${about}" ]
-then
-	echo -ne 'Experiment description: ${about}; '
-else
-	echo -ne 'Experiment description: '
-fi
+	# Experiment description
+	if [ -n "${about}" ]
+	then
+		echo -ne 'Experiment description: ${about}; '
+	else
+		echo -ne 'Experiment description: '
+	fi
 
-# Get version numbers of all software
-echo -ne "Juicer version $juicer_version;" 
-bwa 2>&1 | awk '\\\$1=="Version:"{printf(" BWA %s; ", \\\$2)}'
-echo -ne "$threads threads; "
-if [ -n "$splitme" ]
-then
-	echo -ne "splitsize $splitsize; "
-fi  
-java -version 2>&1 | awk 'NR==1{printf("%s; ", \\\$0);}'
-${juiceDir}/scripts/juicer_tools -V 2>&1 | awk '\\\$1=="Juicer" && \\\$2=="Tools"{printf("%s; ", \\\$0);}'
-
-echo "$0 $@"
+	# Get version numbers of all software
+	echo -ne "Juicer version $juicer_version;" 
+	bwa 2>&1 | awk '\\\$1=="Version:"{printf(" BWA %s; ", \\\$2)}'
+	echo -ne "$threads threads; "
+	if [ -n "$splitme" ]
+	then
+		echo -ne "splitsize $splitsize; "
+	fi  
+	java -version 2>&1 | awk 'NR==1{printf("%s; ", \\\$0);}'
+	${juiceDir}/scripts/juicer_tools -V 2>&1 | awk '\\\$1=="Juicer" && \\\$2=="Tools"{printf("%s; ", \\\$0);}'
+	
+	echo "$0 $@"
 HEADER`
 headfile="${debugdir}/head-${jid}.out"
 
