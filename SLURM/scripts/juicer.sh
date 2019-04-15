@@ -429,7 +429,7 @@ fi
 
 # Add header containing command executed and timestamp:
 jid=`sbatch <<- HEADER | egrep -o -e "\b[0-9]+$"
-	#!/bin/bash -l
+	#!/bin/bash
 	#SBATCH -p $queue
 	#SBATCH -t 2
 	#SBATCH -c 1
