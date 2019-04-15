@@ -127,6 +127,7 @@ USER=$(whoami)
 
 load_bwa="export PATH=$PATH:/dscrhome/jdw54/bwa-0.7.17"
 load_java="export PATH=/dscrhome/jdw54/.linuxbrew/bin:$PATH"
+load_gpu="export PATH=$PATH:/usr/local/cuda/bin"
 
 # Juicer directory, contains scripts/, references/, and restriction_sites/
 # can also be set in options via -D
@@ -137,6 +138,8 @@ queue_time="1200"
 # default long queue, can also be set in options via -l
 long_queue="common"
 long_queue_time="3600"
+# Add DCC-specific gpu queue
+gpu_queue="gpu-common"
 
 # size to split fastqs. adjust to match your needs. 4000000=1M reads per split
 # can also be changed via the -C flag
