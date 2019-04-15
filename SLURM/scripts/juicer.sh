@@ -127,6 +127,7 @@ USER=$(whoami)
 
 load_bwa="export PATH=$PATH:/dscrhome/jdw54/bwa-0.7.17"
 load_java="export PATH=/dscrhome/jdw54/.linuxbrew/bin:$PATH"
+load_gpu="export PATH=$PATH:/usr/local/cuda/bin"
 
 # Juicer directory, contains scripts/, references/, and restriction_sites/
 # can also be set in options via -D
@@ -137,7 +138,9 @@ queue_time="1200"
 # default long queue, can also be set in options via -l
 long_queue="common"
 long_queue_time="3600"
-
+# special queue for gpu nodes
+gpu_queue="gpu-common"
+alloc_gpu="#SBATCH --gres=gpu:1"
 # size to split fastqs. adjust to match your needs. 4000000=1M reads per split
 # can also be changed via the -C flag
 splitsize=90000000
@@ -1160,40 +1163,68 @@ else
     sbatch_wait=""
 fi
 
-if [ $isRice -eq 1 ] || [ $isVoltron -eq 1 ]
-then
-    if [  $isRice -eq 1 ]
-    then
-	sbatch_req="#SBATCH --gres=gpu:kepler:1"
-    fi
-    jid=`sbatch <<- HICCUPS | egrep -o -e "\b[0-9]+$"
-	#!/bin/bash
-	#SBATCH -p $queue
-	#SBATCH --mem-per-cpu=2G
-	${sbatch_req}
-	#SBATCH -o $debugdir/hiccups_wrap-%j.out
-	#SBATCH -e $debugdir/hiccups_wrap-%j.err
-	#SBATCH -t $long_queue_time
-	#SBATCH --ntasks=1
-	#SBATCH -J "${groupname}_hiccups_wrap"
-	${sbatch_wait}
-	${load_gpu}
-	echo "load: $load_gpu"
-	${load_java}
-	date
-	nvcc -V
+# if [ $isRice -eq 1 ] || [ $isVoltron -eq 1 ]
+# then
+#     if [  $isRice -eq 1 ]
+#     then
+# 	sbatch_req="#SBATCH --gres=gpu:kepler:1"
+#     fi
+#     jid=`sbatch <<- HICCUPS | egrep -o -e "\b[0-9]+$"
+# 	#!/bin/bash
+# 	#SBATCH -p $queue
+# 	#SBATCH --mem-per-cpu=2G
+# 	${sbatch_req}
+# 	#SBATCH -o $debugdir/hiccups_wrap-%j.out
+# 	#SBATCH -e $debugdir/hiccups_wrap-%j.err
+# 	#SBATCH -t $long_queue_time
+# 	#SBATCH --ntasks=1
+# 	#SBATCH -J "${groupname}_hiccups_wrap"
+# 	${sbatch_wait}
+# 	${load_gpu}
+# 	echo "load: $load_gpu"
+# 	${load_java}
+# 	date
+# 	nvcc -V
+#         if [ -f "${errorfile}" ]
+#         then 
+#             echo "***! Found errorfile. Exiting." 
+#             exit 1 
+#         fi 
+# 	${juiceDir}/scripts/juicer_hiccups.sh -j ${juiceDir}/scripts/juicer_tools -i $outputdir/inter_30.hic -m ${juiceDir}/references/motif -g $genomeID
+# 	date
+# HICCUPS`
+#     dependhiccups="afterok:$jid"
+# else
+#     dependhiccups="afterok"
+# fi
+
+# HICCUPS call modified for use on DCC
+
+jid=`sbatch <<- HICCUPS | egrep -o -e "\b[0-9]+$"
+    #!/bin/bash
+    #SBATCH -p $gpu_queue
+    #SBATCH --mem-per-cpu=2G
+    ${sbatch_req}
+    #SBATCH -o $debugdir/hiccups_wrap-%j.out
+    #SBATCH -e $debugdir/hiccups_wrap-%j.err
+    #SBATCH -t $long_queue_time
+    #SBATCH --ntasks=1
+    #SBATCH -J "${groupname}_hiccups_wrap"
+    ${sbatch_wait}
+    ${load_gpu}
+    echo "load: $load_gpu"
+    ${load_java}
+    date
+    nvcc -V
         if [ -f "${errorfile}" ]
         then 
             echo "***! Found errorfile. Exiting." 
             exit 1 
         fi 
-	${juiceDir}/scripts/juicer_hiccups.sh -j ${juiceDir}/scripts/juicer_tools -i $outputdir/inter_30.hic -m ${juiceDir}/references/motif -g $genomeID
-	date
+    ${juiceDir}/scripts/juicer_hiccups.sh -j ${juiceDir}/scripts/juicer_tools -i $outputdir/inter_30.hic -m ${juiceDir}/references/motif -g $genomeID
+    date
 HICCUPS`
     dependhiccups="afterok:$jid"
-else
-    dependhiccups="afterok"
-fi
 
 jid=`sbatch <<- ARROWS | egrep -o -e "\b[0-9]+$"
 	#!/bin/bash
