@@ -497,7 +497,7 @@ then
                 if [ -z "$gzipped" ]
                 then	
 		    jid=`sbatch <<- SPLITEND | egrep -o -e "\b[0-9]+$"
-			#!/bin/bash -l
+			#!/bin/bash
 			#SBATCH -p $queue
 			#SBATCH -t $queue_time
 			#SBATCH -c 1
@@ -511,7 +511,7 @@ then
 SPLITEND`
 		else
 		    jid=`sbatch <<- SPLITEND | egrep -o -e "\b[0-9]+$"
-			#!/bin/bash -l
+			#!/bin/bash
 			#SBATCH -p $queue
 			#SBATCH -t $queue_time
 			#SBATCH -c 1
@@ -581,7 +581,7 @@ SPLITEND`
 
 	# count ligations
 	jid=`sbatch <<- CNTLIG |  egrep -o -e "\b[0-9]+$"
-		#!/bin/bash -l
+		#!/bin/bash
 		#SBATCH -p $queue
 		#SBATCH -t $queue_time
 		#SBATCH -c 1
@@ -688,7 +688,7 @@ ALGNR2`
 	touchfile3=${tmpdir}/${jname}3
 	# wait for top two, merge
 	jid=`sbatch <<- MRGALL | egrep -o -e "\b[0-9]+$"
-		#!/bin/bash -l
+		#!/bin/bash
 		#SBATCH -p $long_queue
 		#SBATCH -o $debugdir/merge-%j.out
 		#SBATCH -e $debugdir/merge-%j.err
@@ -925,7 +925,7 @@ then
     # We keep the ID of this guard, so we can later alter dependencies of inner dedupping phase.
     # After dedup is done, this job will be released. 
     guardjid=`sbatch <<- DEDUPGUARD | egrep -o -e "\b[0-9]+$"
-	#!/bin/bash -l
+	#!/bin/bash
 	#SBATCH -p $queue
 	#SBATCH -o $debugdir/dedupguard-%j.out
 	#SBATCH -e $debugdir/dedupguard-%j.err
@@ -942,7 +942,7 @@ DEDUPGUARD`
 
     # if jobs succeeded, kill the cleanup job, remove the duplicates from the big sorted file
     jid=`sbatch <<- DEDUP | egrep -o -e "\b[0-9]+$"
-	#!/bin/bash -l
+	#!/bin/bash
 	#SBATCH -p $queue
 	#SBATCH --mem-per-cpu=2G
 	#SBATCH -o $debugdir/dedup-%j.out
@@ -975,7 +975,7 @@ DEDUP`
 
     #Wait for all parts of split_rmdups to complete:
     jid=`sbatch <<- MSPLITWAIT | egrep -o -e "\b[0-9]+$"
-	#!/bin/bash -l
+	#!/bin/bash
 	#SBATCH -p $queue
 	#SBATCH -o $debugdir/post_dedup-%j.out
 	#SBATCH -e $debugdir/post_dedup-%j.err
@@ -1030,9 +1030,9 @@ if [ -z $postproc ]
     then
     # Check that dedupping worked properly
     # in ideal world, we would check this in split_rmdups and not remove before we know they are correct
-    awkscript='BEGIN{sscriptname = sprintf("%s/.%s_rmsplit.slurm", debugdir, groupname);}NR==1{if (NF == 2 && $1 == $2 ){print "Sorted and dups/no dups files add up"; printf("#!/bin/bash -l\n#SBATCH -o %s/dup-rm.out\n#SBATCH -e %s/dup-rm.err\n#SBATCH -p %s\n#SBATCH -J %s_msplit0\n#SBATCH -d singleton\n#SBATCH -t 1440\n#SBATCH -c 1\n#SBATCH --ntasks=1\ndate;\nrm %s/*_msplit*_optdups.txt; rm %s/*_msplit*_dups.txt; rm %s/*_msplit*_merged_nodups.txt;rm %s/split*;\ndate\n", debugdir, debugdir, queue, groupname, dir, dir, dir, dir) > sscriptname; sysstring = sprintf("sbatch %s", sscriptname); system(sysstring);close(sscriptname); }else{print "Problem"; print "***! Error! The sorted file and dups/no dups files do not add up, or were empty."}}'
+    awkscript='BEGIN{sscriptname = sprintf("%s/.%s_rmsplit.slurm", debugdir, groupname);}NR==1{if (NF == 2 && $1 == $2 ){print "Sorted and dups/no dups files add up"; printf("#!/bin/bash\n#SBATCH -o %s/dup-rm.out\n#SBATCH -e %s/dup-rm.err\n#SBATCH -p %s\n#SBATCH -J %s_msplit0\n#SBATCH -d singleton\n#SBATCH -t 1440\n#SBATCH -c 1\n#SBATCH --ntasks=1\ndate;\nrm %s/*_msplit*_optdups.txt; rm %s/*_msplit*_dups.txt; rm %s/*_msplit*_merged_nodups.txt;rm %s/split*;\ndate\n", debugdir, debugdir, queue, groupname, dir, dir, dir, dir) > sscriptname; sysstring = sprintf("sbatch %s", sscriptname); system(sysstring);close(sscriptname); }else{print "Problem"; print "***! Error! The sorted file and dups/no dups files do not add up, or were empty."}}'
     jid=`sbatch <<- DUPCHECK | egrep -o -e "\b[0-9]+$"
-	#!/bin/bash -l
+	#!/bin/bash
 	#SBATCH -p $queue
 	#SBATCH -o $debugdir/dupcheck-%j.out
 	#SBATCH -e $debugdir/dupcheck-%j.err
@@ -1051,7 +1051,7 @@ if [ -z $postproc ]
 DUPCHECK`
     sbatch_wait="#SBATCH -d afterok:$jid"
     jid=`sbatch <<- STATS | egrep -o -e "\b[0-9]+$"
-		#!/bin/bash -l
+		#!/bin/bash
 		#SBATCH -p $long_queue
 		#SBATCH -o $debugdir/stats-%j.out
 		#SBATCH -e $debugdir/stats-%j.err
@@ -1092,7 +1092,7 @@ STATS`
     dependstats="afterok:$jid"
 
     jid=`sbatch <<- HIC | egrep -o -e "\b[0-9]+$"
-	#!/bin/bash -l
+	#!/bin/bash
 	#SBATCH -p $long_queue
 	#SBATCH -o $debugdir/hic-%j.out
 	#SBATCH -e $debugdir/hic-%j.err	
@@ -1122,7 +1122,7 @@ HIC`
     dependhic="afterok:$jid"
 
     jid=`sbatch <<- HIC30 | egrep -o -e "\b[0-9]+$"
-	#!/bin/bash -l
+	#!/bin/bash
 	#SBATCH -p $long_queue
 	#SBATCH -o $debugdir/hic30-%j.out
 	#SBATCH -e $debugdir/hic30-%j.err
@@ -1162,7 +1162,7 @@ then
 	sbatch_req="#SBATCH --gres=gpu:kepler:1"
     fi
     jid=`sbatch <<- HICCUPS | egrep -o -e "\b[0-9]+$"
-	#!/bin/bash -l
+	#!/bin/bash
 	#SBATCH -p $queue
 	#SBATCH --mem-per-cpu=2G
 	${sbatch_req}
@@ -1191,7 +1191,7 @@ else
 fi
 
 jid=`sbatch <<- ARROWS | egrep -o -e "\b[0-9]+$"
-	#!/bin/bash -l
+	#!/bin/bash
 	#SBATCH -p $queue
 	#SBATCH --mem-per-cpu=8G
 	#SBATCH -o $debugdir/arrowhead_wrap-%j.out
