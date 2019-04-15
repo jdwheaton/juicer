@@ -120,6 +120,11 @@ isRice=0
 isBCM=0
 isVoltron=0
 
+# Duke DCC-specific options
+
+# For some reason the $USER environment var is not set, so set it now
+USER=$(whoami)
+
 load_bwa="export PATH=$PATH:/dscrhome/jdw54/bwa-0.7.17"
 load_java="export PATH=/dscrhome/jdw54/.linuxbrew/bin:$PATH"
 
