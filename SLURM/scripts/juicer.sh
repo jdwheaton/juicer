@@ -597,7 +597,7 @@ CNTLIG`
 	touchfile1=${tmpdir}/${jname}1
 
 	jid=`sbatch <<- ALGNR1 | egrep -o -e "\b[0-9]+$"
-		#!/bin/bash -l
+		#!/bin/bash
 		#SBATCH -p $queue
 		#SBATCH -o $debugdir/align1-%j.out
 		#SBATCH -e $debugdir/align1-%j.err
@@ -642,7 +642,7 @@ ALGNR1`
 	# align read2 fastq
 	touchfile2=${tmpdir}/${jname}2
 	jid=`sbatch <<- ALGNR2 | egrep -o -e "\b[0-9]+$"
-		#!/bin/bash -l
+		#!/bin/bash
 		#SBATCH -p $queue
 		#SBATCH -o $debugdir/align2-%j.out
 		#SBATCH -e $debugdir/align2-%j.err
