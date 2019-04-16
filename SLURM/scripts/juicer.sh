@@ -119,6 +119,7 @@ juicer_version="1.5.6"
 isRice=0
 isBCM=0
 isVoltron=0
+isDuke=1
 
 # Duke DCC-specific options
 
@@ -1163,15 +1164,15 @@ else
     sbatch_wait=""
 fi
 
-if [ $isRice -eq 1 ] || [ $isVoltron -eq 1 ]
+if [ $isRice -eq 1 ] || [ $isVoltron -eq 1 ] || [ $isDuke -eq 1 ]
 then
-    if [  $isRice -eq 1 ]
+    if [  $isRice -eq 1 ] || [ $isDuke -eq 1 ]
     then
-	sbatch_req="#SBATCH --gres=gpu:kepler:1"
+	sbatch_req="#SBATCH --gres=gpu:1"
     fi
     jid=`sbatch <<- HICCUPS | egrep -o -e "\b[0-9]+$"
 	#!/bin/bash
-	#SBATCH -p $queue
+	#SBATCH -p $gpu_queue
 	#SBATCH --mem-per-cpu=2G
 	${sbatch_req}
 	#SBATCH -o $debugdir/hiccups_wrap-%j.out
