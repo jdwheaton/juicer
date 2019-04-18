@@ -869,7 +869,7 @@ then
     then  
 	sbatch_time="#SBATCH -t 10080"
     else
-	sbatch_time="#SBATCH -t 4320"
+	sbatch_time="#SBATCH -t 1440"
     fi
 
 
