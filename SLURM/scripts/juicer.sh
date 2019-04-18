@@ -1172,7 +1172,7 @@ then
 	sbatch_req="#SBATCH --gres=gpu:1"
     fi
     jid=`sbatch <<- HICCUPS | egrep -o -e "\b[0-9]+$"
-	#!/bin/bash
+	#!/bin/bash -l
 	#SBATCH -p $gpu_queue
 	#SBATCH --mem-per-cpu=2G
 	#SBATCH --gres=gpu:1
