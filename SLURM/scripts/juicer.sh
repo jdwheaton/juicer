@@ -1175,7 +1175,7 @@ then
 	#!/bin/bash
 	#SBATCH -p $gpu_queue
 	#SBATCH --mem-per-cpu=2G
-	#SBATCH --gres=gpu:1
+	${sbatch_req}
 	#SBATCH -o $debugdir/hiccups_wrap-%j.out
 	#SBATCH -e $debugdir/hiccups_wrap-%j.err
 	#SBATCH -t $gpu_queue_time
