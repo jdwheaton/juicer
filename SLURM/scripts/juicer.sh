@@ -141,6 +141,7 @@ long_queue="common"
 long_queue_time="3600"
 # Add DCC-specific gpu queue
 gpu_queue="gpu-common"
+gpu_queue_time="2880"
 
 # size to split fastqs. adjust to match your needs. 4000000=1M reads per split
 # can also be changed via the -C flag
@@ -1177,7 +1178,7 @@ then
 	${sbatch_req}
 	#SBATCH -o $debugdir/hiccups_wrap-%j.out
 	#SBATCH -e $debugdir/hiccups_wrap-%j.err
-	#SBATCH -t $long_queue_time
+	#SBATCH -t $gpu_queue_time
 	#SBATCH --ntasks=1
 	#SBATCH -J "${groupname}_hiccups_wrap"
 	${sbatch_wait}
