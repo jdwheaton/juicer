@@ -127,7 +127,7 @@ isDuke=1
 USER=$(whoami)
 
 load_bwa="export PATH=$PATH:/dscrhome/jdw54/bwa-0.7.17"
-load_java="export PATH=/dscrhome/jdw54/.linuxbrew/bin:$PATH"
+load_java="export PATH=/dscrhome/jdw54/.linuxbrew/Cellar/jdk\@8/1.8.0-181/bin:$PATH"
 load_gpu="export PATH=$PATH:/usr/local/cuda-8.0/bin"
 
 # Juicer directory, contains scripts/, references/, and restriction_sites/
