@@ -1174,7 +1174,7 @@ then
     jid=`sbatch <<- HICCUPS | egrep -o -e "\b[0-9]+$"
 	#!/bin/bash
 	#SBATCH -p $gpu_queue
-	#SBATCH --mem-per-cpu=2G
+	#SBATCH --mem=17G
 	${sbatch_req}
 	#SBATCH -o $debugdir/hiccups_wrap-%j.out
 	#SBATCH -e $debugdir/hiccups_wrap-%j.err
