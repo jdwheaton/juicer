@@ -130,6 +130,8 @@ load_bwa="export PATH=$PATH:/dscrhome/jdw54/bwa-0.7.17"
 load_java="export PATH=/dscrhome/jdw54/.linuxbrew/Cellar/jdk\@8/1.8.0-181/bin:$PATH"
 load_gpu="export PATH=$PATH:/usr/local/cuda-8.0/bin"
 
+sbatch_opt="#SBATCH --exclude='dcc-compeb-01'"
+
 # Juicer directory, contains scripts/, references/, and restriction_sites/
 # can also be set in options via -D
 juiceDir="/dscrhome/jdw54/juicer"
@@ -598,6 +600,7 @@ SPLITEND`
 		#SBATCH -o $debugdir/count_ligation-%j.out
 		#SBATCH -e $debugdir/count_ligation-%j.err
 		#SBATCH -J "${groupname}${jname}_Count_Ligation"
+        ${sbatch_opt}
 		date
 		export usegzip=${usegzip}; export name=${name}; export name1=${name1}; export name2=${name2}; export ext=${ext}; export ligation=${ligation}; ${juiceDir}/scripts/countligations.sh
 		date
@@ -617,7 +620,8 @@ CNTLIG`
 		#SBATCH --ntasks=1
 		#SBATCH --mem-per-cpu=$alloc_mem
 		#SBATCH -J "${groupname}_align1_${jname}"
-		#SBATCH --threads-per-core=1		
+		#SBATCH --threads-per-core=1
+        ${sbatch_opt}	
 		${load_bwa}
 		# Align read1
 		date
@@ -662,7 +666,8 @@ ALGNR1`
 		#SBATCH --ntasks=1
 		#SBATCH --mem-per-cpu=$alloc_mem
 		#SBATCH -J "${groupname}_align2_${jname}"
-		#SBATCH --threads-per-core=1		
+		#SBATCH --threads-per-core=1
+        ${sbatch_opt}	
 		${load_bwa}
 		date
 		# Align read2
@@ -709,6 +714,7 @@ ALGNR2`
 		#SBATCH -d $dependalign
 		#SBATCH -J "${groupname}_merge_${jname}"
 		#SBATCH --threads-per-core=1
+        ${sbatch_opt}
 		export LC_COLLATE=C
 		date
 		if [ ! -f "${touchfile1}" ] || [ ! -f "${touchfile2}" ]
@@ -838,6 +844,7 @@ MRGALL`
 		#SBATCH -p $queue
 		#SBATCH -J "${groupname}_check"
 		#SBATCH -d $dependmerge
+        ${sbatch_opt}
 		date
 		echo "Checking $f"
 		if [ ! -e $f ]
@@ -883,6 +890,7 @@ then
 		#SBATCH -p $long_queue
 		#SBATCH -c 8
 		#SBATCH -J "${groupname}_fragmerge"
+        ${sbatch_opt}
 		${sbatch_wait}
 		date
 		if [ -f "${errorfile}" ]
@@ -944,6 +952,7 @@ then
 	#SBATCH -H
 	#SBATCH --ntasks=1
 	#SBATCH -J "${groupname}_dedup_guard"
+    ${sbatch_opt}
 	${sbatch_wait}
 	date
 DEDUPGUARD`
@@ -961,6 +970,7 @@ DEDUPGUARD`
 	#SBATCH -c 1
 	#SBATCH --ntasks=1
 	#SBATCH -J "${groupname}_dedup"
+    ${sbatch_opt}
 	${sbatch_wait}
 	date
         if [ -f "${errorfile}" ]
@@ -994,6 +1004,7 @@ DEDUP`
 	#SBATCH --ntasks=1
 	#SBATCH -J "${groupname}_post_dedup"
 	#SBATCH -d ${dependguard}
+    ${sbatch_opt}
 	date
 	rm -Rf $tmpdir;
 	find $debugdir -type f -size 0 | xargs rm
@@ -1025,7 +1036,8 @@ then
 	#SBATCH -t 1200
 	#SBATCH -c 1
 	#SBATCH --ntasks=1
-	#SBATCH -J "${groupname}_prep_done"     
+	#SBATCH -J "${groupname}_prep_done"
+    ${sbatch_opt}
 	${sbatch_wait}
 	date
 	export splitdir=${splitdir}; export outputdir=${outputdir}; export early=1; ${juiceDir}/scripts/check.sh
@@ -1051,6 +1063,7 @@ if [ -z $postproc ]
 	#SBATCH --ntasks=1
 	#SBATCH --mem-per-cpu=1G
 	#SBATCH -J "${groupname}_dupcheck"
+    ${sbatch_opt}
 	${sbatch_wait}
 
 	date      
@@ -1070,6 +1083,7 @@ DUPCHECK`
 		#SBATCH --ntasks=1
 		#SBATCH --mem-per-cpu=6G
 		#SBATCH -J "${groupname}_stats"
+        ${sbatch_opt}
 		${sbatch_wait}
 
 		date
@@ -1112,6 +1126,7 @@ STATS`
 	#SBATCH --mem-per-cpu=32G
 	#SBATCH -J "${groupname}_hic"
 	#SBATCH -d $dependstats
+    ${sbatch_opt}
 	${load_java}
 	export IBM_JAVA_OPTIONS="-Xmx48192m -Xgcthreads1"
 	date
@@ -1142,6 +1157,7 @@ HIC`
 	#SBATCH --mem-per-cpu=32G
 	#SBATCH -J "${groupname}_hic30"
 	#SBATCH -d ${dependstats}
+    ${sbatch_opt}
 	${load_java}
 	export IBM_JAVA_OPTIONS="-Xmx48192m -Xgcthreads1"
 	date
@@ -1181,6 +1197,7 @@ then
 	#SBATCH -t $gpu_queue_time
 	#SBATCH --ntasks=1
 	#SBATCH -J "${groupname}_hiccups_wrap"
+    ${sbatch_opt}
 	${sbatch_wait}
 	${load_gpu}
 	echo "load: $load_gpu"
@@ -1209,6 +1226,7 @@ jid=`sbatch <<- ARROWS | egrep -o -e "\b[0-9]+$"
 	#SBATCH -t $long_queue_time
 	#SBATCH --ntasks=1
 	#SBATCH -J "${groupname}_arrowhead_wrap"
+    ${sbatch_opt}
 	${sbatch_wait}
 	${load_java}
 	date
@@ -1233,6 +1251,7 @@ jid=`sbatch <<- FINCLN1 | egrep -o -e "\b[0-9]+$"
 	#SBATCH --ntasks=1
 	#SBATCH -J "${groupname}_prep_done"
 	#SBATCH -d $dependarrows
+    ${sbatch_opt}
 	date
 	export splitdir=${splitdir}; export outputdir=${outputdir}; ${juiceDir}/scripts/check.sh
 	date
