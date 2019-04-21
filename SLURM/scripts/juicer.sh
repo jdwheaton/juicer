@@ -131,7 +131,7 @@ load_java="export PATH=/dscrhome/jdw54/.linuxbrew/Cellar/jdk\@8/1.8.0-181/bin:$P
 load_gpu="export PATH=$PATH:/usr/local/cuda-8.0/bin"
 
 # Exclude failing node
-exclude_node="-x dcc-compeb-01"
+exclude_node="--exclude=dcc-compeb-01"
 sbatch_opt="#SBATCH ${exclude_node}"
 
 # Juicer directory, contains scripts/, references/, and restriction_sites/
