@@ -131,7 +131,8 @@ load_java="export PATH=/dscrhome/jdw54/.linuxbrew/Cellar/jdk\@8/1.8.0-181/bin:$P
 load_gpu="export PATH=$PATH:/usr/local/cuda-8.0/bin"
 
 # Exclude failing node
-sbatch_opt="#SBATCH -x dcc-compeb-01"
+exclude_node="-x dcc-compeb-01"
+sbatch_opt="#SBATCH ${exclude_node}"
 
 # Juicer directory, contains scripts/, references/, and restriction_sites/
 # can also be set in options via -D
@@ -629,7 +630,7 @@ CNTLIG`
 		if [ -n "$shortread" ] || [ "$shortreadend" -eq 1 ]
 		then
 			echo 'Running command bwa aln $threadstring -q 15 $refSeq $name1$ext > $name1$ext.sai && bwa samse $refSeq $name1$ext.sai $name1$ext > $name1$ext.sam'
-			srun --ntasks=1 bwa aln $threadstring -q 15 $refSeq $name1$ext > $name1$ext.sai && srun --ntasks=1 bwa samse $refSeq $name1$ext.sai $name1$ext > $name1$ext.sam
+			srun ${exclue_node} --ntasks=1 bwa aln $threadstring -q 15 $refSeq $name1$ext > $name1$ext.sai && srun ${exclue_node} --ntasks=1 bwa samse $refSeq $name1$ext.sai $name1$ext > $name1$ext.sam
 			if [ \$? -ne 0 ]
 			then
 				touch $errorfile
@@ -640,7 +641,7 @@ CNTLIG`
     			fi
 		else
 			echo 'Running command bwa mem $threadstring $refSeq $name1$ext > $name1$ext.sam '
-			srun --ntasks=1 bwa mem $threadstring $refSeq $name1$ext > $name1$ext.sam
+			srun ${exclue_node} --ntasks=1 bwa mem $threadstring $refSeq $name1$ext > $name1$ext.sam
 			if [ \$? -ne 0 ]
 			then  
 				touch $errorfile
@@ -675,7 +676,7 @@ ALGNR1`
 		if [ -n "$shortread" ] || [ "$shortreadend" -eq 2 ]
 		then		
 			echo 'Running command bwa aln $threadstring -q 15 $refSeq $name2$ext > $name2$ext.sai && bwa samse $refSeq $name2$ext.sai $name2$ext > $name2$ext.sam '
-			srun --ntasks=1 bwa aln $threadstring -q 15 $refSeq $name2$ext > $name2$ext.sai && srun --ntasks=1 bwa samse $refSeq $name2$ext.sai $name2$ext > $name2$ext.sam
+			srun ${exclue_node} --ntasks=1 bwa aln $threadstring -q 15 $refSeq $name2$ext > $name2$ext.sai && srun ${exclue_node} --ntasks=1 bwa samse $refSeq $name2$ext.sai $name2$ext > $name2$ext.sam
 			if [ \$? -ne 0 ]
 			then 
 				touch $errorfile
@@ -686,7 +687,7 @@ ALGNR1`
 			fi
 		else	
 			echo 'Running command bwa mem $threadstring $refSeq $name2$ext > $name2$ext.sam'
-			srun --ntasks=1 bwa mem $threadstring $refSeq $name2$ext > $name2$ext.sam
+			srun ${exclue_node} --ntasks=1 bwa mem $threadstring $refSeq $name2$ext > $name2$ext.sam
 			if [ \$? -ne 0 ]
 			then 
 				touch $errorfile
