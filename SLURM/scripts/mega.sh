@@ -84,7 +84,7 @@ isRice=0
 isBCM=0
 isVoltron=0
 
-
+juiceDir='/dscrhome/jdw54/juicer/'
 queue='scavenger'
 queue_time='1200'
 long_queue='common'
