@@ -35,51 +35,60 @@
 juicer_version="1.5.6" 
 ## Set the following variables to work with your system
 
-# Aiden Lab specific check
-isRice=$(hostname | awk '{if ($1~/rice/){print 1}else {print 0}}')
-isBCM=$(hostname | awk '{if ($1~/bcm/){print 1}else {print 0}}')
+# # Aiden Lab specific check
+# isRice=$(hostname | awk '{if ($1~/rice/){print 1}else {print 0}}')
+# isBCM=$(hostname | awk '{if ($1~/bcm/){print 1}else {print 0}}')
+# isVoltron=0
+# ## path additionals, make sure paths are correct for your system
+# ## use cluster load commands
+# if [ $isRice -eq 1 ] 
+# then
+#     myPath=/bin:$PATH 
+#     load_bwa="module load BioBuilds/2015.04" 
+#     load_java="module load Java/8.0.3.22" 
+#     load_gpu="module load gcccuda/2016a;module load CUDA/8.0.54;" 
+#     # Juicer directory, contains scripts/, references/, and restriction_sites/
+#     # can also be set in options via -D
+#     juiceDir="/projects/ea14/juicer" ### RICE
+#     # default queue, can also be set in options via -q
+#     queue="commons"
+#     # default long queue, can also be set in options via -l
+#     long_queue="commons"
+#     long_queue_time="1440"
+# elif [ $isBCM -eq 1 ]
+# then    
+#     # Juicer directory, contains scripts/, references/, and restriction_sites/
+#     # can also be set in options via -D
+#     juiceDir="/storage/aiden/juicer/"
+#     # default queue, can also be set in options via -q
+#     queue="mhgcp"
+#     queue_time="1200"
+#     # default long queue, can also be set in options via -l
+#     long_queue="mhgcp"
+#     long_queue_time="3600"
+# else
+#     isVoltron=1
+#     export PATH=/gpfs0/biobuild/biobuilds-2016.11/bin:$PATH 
+#     unset MALLOC_ARENA_MAX
+#     load_gpu="CUDA_VISIBLE_DEVICES=0,1,2,3"
+#     # Juicer directory, contains scripts/, references/, and restriction_sites/
+#     # can also be set in options via -D
+#     juiceDir="/gpfs0/juicer/"
+#     # default queue, can also be set in options
+#     queue="commons"
+#     # default long queue, can also be set in options
+#     long_queue="long"
+#     long_queue_time="10080"
+# fi
+isRice=0
+isBCM=0
 isVoltron=0
-## path additionals, make sure paths are correct for your system
-## use cluster load commands
-if [ $isRice -eq 1 ] 
-then
-    myPath=/bin:$PATH 
-    load_bwa="module load BioBuilds/2015.04" 
-    load_java="module load Java/8.0.3.22" 
-    load_gpu="module load gcccuda/2016a;module load CUDA/8.0.54;" 
-    # Juicer directory, contains scripts/, references/, and restriction_sites/
-    # can also be set in options via -D
-    juiceDir="/projects/ea14/juicer" ### RICE
-    # default queue, can also be set in options via -q
-    queue="commons"
-    # default long queue, can also be set in options via -l
-    long_queue="commons"
-    long_queue_time="1440"
-elif [ $isBCM -eq 1 ]
-then    
-    # Juicer directory, contains scripts/, references/, and restriction_sites/
-    # can also be set in options via -D
-    juiceDir="/storage/aiden/juicer/"
-    # default queue, can also be set in options via -q
-    queue="mhgcp"
-    queue_time="1200"
-    # default long queue, can also be set in options via -l
-    long_queue="mhgcp"
-    long_queue_time="3600"
-else
-    isVoltron=1
-    export PATH=/gpfs0/biobuild/biobuilds-2016.11/bin:$PATH 
-    unset MALLOC_ARENA_MAX
-    load_gpu="CUDA_VISIBLE_DEVICES=0,1,2,3"
-    # Juicer directory, contains scripts/, references/, and restriction_sites/
-    # can also be set in options via -D
-    juiceDir="/gpfs0/juicer/"
-    # default queue, can also be set in options
-    queue="commons"
-    # default long queue, can also be set in options
-    long_queue="long"
-    long_queue_time="10080"
-fi
+
+
+queue='scavenger'
+queue_time='1200'
+long_queue='common'
+long_queue_time='3600'
 
 # unique name for jobs in this run
 groupname="a$(date +%s)"
