@@ -353,9 +353,9 @@ fi
 threadstring="-t $threads"
 alloc_mem=$(($threads * 5000))
 
-if [ $alloc_mem -gt 40000 ]
+if [ $alloc_mem -gt 64000 ]
 then
-	alloc_mem=40000
+	alloc_mem=64000
 fi
 
 ## Directories to be created and regex strings for listing files
@@ -616,7 +616,7 @@ CNTLIG`
 		#SBATCH -n 1
 		#SBATCH -c $threads
 		#SBATCH --ntasks=1
-		#SBATCH --mem-per-cpu=$alloc_mem
+		#SBATCH --mem=$alloc_mem
 		#SBATCH -J "${groupname}_align1_${jname}"
 		#SBATCH --threads-per-core=1
 		${load_bwa}
@@ -661,7 +661,7 @@ ALGNR1`
 		#SBATCH -n 1
 		#SBATCH -c $threads
 		#SBATCH --ntasks=1
-		#SBATCH --mem-per-cpu=$alloc_mem
+		#SBATCH --mem=$alloc_mem
 		#SBATCH -J "${groupname}_align2_${jname}"
 		#SBATCH --threads-per-core=1
 		${load_bwa}
