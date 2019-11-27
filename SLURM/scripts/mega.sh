@@ -83,6 +83,10 @@ juicer_version="1.5.6"
 isRice=0
 isBCM=0
 isVoltron=0
+isDuke=1
+
+load_java="export PATH=/dscrhome/jdw54/.linuxbrew/Cellar/jdk\@8/1.8.0-181/bin:$PATH"
+load_gpu="export PATH=$PATH:/usr/local/cuda-8.0/bin:/usr/local/cuda/bin/"
 
 juiceDir='/dscrhome/jdw54/juicer/'
 queue='scavenger'
@@ -418,11 +422,11 @@ if [ -z $early ]
 then
 # Create loop lists file for MQ > 30
     touchfile7=${megadir}/touch7
-    if [ $isRice -eq 1 ] || [ $isVoltron -eq 1 ]
+    if [ $isDuke -eq 1 ] || [ $isVoltron -eq 1 ] 
     then
-	if [  $isRice -eq 1 ]
+	if [  $isDuke -eq 1 ]
 	then
-	    sbatch_req="#SBATCH --gres=gpu:kepler:1"
+	    sbatch_req="#SBATCH --gres=gpu:1"
 	fi
 	jid7=`sbatch <<- HICCUPS | egrep -o -e "\b[0-9]+$"
 	#!/bin/bash -l
