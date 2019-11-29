@@ -267,7 +267,6 @@ TOPSTATS`
 #SBATCH -t ${long_queue_time}
 #SBATCH -c 1
 #SBATCH --ntasks=1
-#SBATCH --mem-per-cpu=16384
 #SBATCH -o $logdir/merge-%j.out
 #SBATCH -e $logdir/merge-%j.err
 #SBATCH -J "${groupname}_merge"
