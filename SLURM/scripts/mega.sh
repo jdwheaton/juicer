@@ -436,11 +436,14 @@ if [ -z $early ]
 then
 # Create loop lists file for MQ > 30
     touchfile7=${megadir}/touch7
-    if [ $isRice -eq 1 ] || [ $isVoltron -eq 1 ]
+    if [ $isRice -eq 1 ] || [ $isVoltron -eq 1 ] || [ $isDuke -eq 1 ]
     then
 	if [  $isRice -eq 1 ]
 	then
 	    sbatch_req="#SBATCH --gres=gpu:kepler:1"
+  elif [ $isDuke -eq 1 ]
+  then
+    sbatch_req="#SBATCH --gres=gpu:1"
 	fi
 	jid7=`sbatch <<- HICCUPS | egrep -o -e "\b[0-9]+$"
 	#!/bin/bash -l
