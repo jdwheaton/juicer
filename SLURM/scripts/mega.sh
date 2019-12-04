@@ -39,6 +39,7 @@ juicer_version="1.5.7"
 isRice=$(hostname | awk '{if ($1~/rice/){print 1}else {print 0}}')
 isBCM=$(hostname | awk '{if ($1~/bcm/){print 1}else {print 0}}')
 isVoltron=0
+isDuke=1
 ## path additionals, make sure paths are correct for your system
 ## use cluster load commands
 if [ $isRice -eq 1 ] 
@@ -66,6 +67,16 @@ then
     # default long queue, can also be set in options via -l
     long_queue="mhgcp"
     long_queue_time="3600"
+elif [ $isDuke -eq 1 ]
+then
+    juiceDir="/dscrhome/jdw54/juicer/"
+    queue="scavenger"
+    queue_time="3600"
+    long_queue="common"
+    long_queue_time="3600"
+    gpu_queue="gpu-common"
+    load_java="export PATH=/dscrhome/jdw54/.linuxbrew/Cellar/jdk\@8/1.8.0-181/bin:$PATH"
+    load_gpu="export PATH=$PATH:/usr/local/cuda-8.0/bin:/usr/local/cuda/bin/"
 else
     isVoltron=1
     export PATH=/gpfs0/biobuild/biobuilds-2016.11/bin:$PATH 
@@ -144,7 +155,7 @@ if [ -z "$ligation" ]; then
 	MboI) ligation="GATCGATC";;
 	none) ligation="XXXX";;
 	*)  ligation="XXXX"
-	    site_file=$site
+	    # site_file=$site
 	    echo "$site not listed as recognized enzyme, so trying it as site file."
 	    echo "Ligation junction is undefined";;
     esac
@@ -271,7 +282,7 @@ TOPSTATS`
 #SBATCH -e $logdir/merge-%j.err
 #SBATCH -J "${groupname}_merge"
 #SBATCH -d "${dependtopstats}"
-#SBATCH --mem-per-cpu=8G
+#SBATCH --mem-per-cpu=32G
 if [ ! -f "${touchfile1}" ]
 then
     echo "***! Top stats job failed, type \"scontrol show job $jid1\" to see what happened."
@@ -364,7 +375,7 @@ INTER30`
 #SBATCH -e $logdir/hic0-%j.err
 #SBATCH -J "${groupname}_hic0"
 #SBATCH -d "${dependinter0}"
-#SBATCH --mem=73G
+#SBATCH --mem=64G
 #source $usePath
 $load_java
 export IBM_JAVA_OPTIONS="-Xmx73728m -Xgcthreads1"
@@ -395,7 +406,7 @@ HIC0`
 #SBATCH -e $logdir/hic30-%j.err
 #SBATCH -J "${groupname}_hic30"
 #SBATCH -d "${dependinter30}"
-#SBATCH --mem=73G
+#SBATCH --mem=64G
 #source $usePath
 $load_java	
 export IBM_JAVA_OPTIONS="-Xmx73728m -Xgcthreads1"
@@ -433,7 +444,7 @@ then
 	fi
 	jid7=`sbatch <<- HICCUPS | egrep -o -e "\b[0-9]+$"
 	#!/bin/bash -l
-	#SBATCH -p ${long_queue}
+	#SBATCH -p ${gpu_queue}
 	#SBATCH -t 1440
 	#SBATCH -c 2
 	#SBATCH --ntasks=1
