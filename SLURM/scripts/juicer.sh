@@ -126,13 +126,13 @@ isDuke=1
 # For some reason the $USER environment var is not set, so set it now
 USER=$(whoami)
 
-load_bwa="export PATH=$PATH:/dscrhome/jdw54/bwa-0.7.17"
-load_java="export PATH=/dscrhome/jdw54/.linuxbrew/Cellar/jdk\@8/1.8.0-181/bin:$PATH"
+load_bwa="export PATH=$PATH:/hpc/home/jdw54/bwa-0.7.17"
+load_java="export PATH=/hpc/home/jdw54/.linuxbrew/Cellar/jdk\@8/1.8.0-181/bin:$PATH"
 load_gpu="export PATH=$PATH:/usr/local/cuda-8.0/bin:/usr/local/cuda/bin/"
 
 # Juicer directory, contains scripts/, references/, and restriction_sites/
 # can also be set in options via -D
-juiceDir="/dscrhome/jdw54/juicer"
+juiceDir="/hpc/home/jdw54/juicer"
 # default queue, can also be set in options via -q
 queue="scavenger"
 queue_time="1200"
