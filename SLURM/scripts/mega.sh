@@ -69,13 +69,13 @@ then
     long_queue_time="3600"
 elif [ $isDuke -eq 1 ]
 then
-    juiceDir="/dscrhome/jdw54/juicer/"
+    juiceDir="/hpc/home/jdw54/juicer/"
     queue="scavenger"
     queue_time="3600"
     long_queue="common"
     long_queue_time="3600"
     gpu_queue="gpu-common"
-    load_java="export PATH=/dscrhome/jdw54/.linuxbrew/Cellar/jdk\@8/1.8.0-181/bin:$PATH"
+    load_java="export PATH=/hpc/home/jdw54/.linuxbrew/bin:$PATH"
     load_gpu="export PATH=$PATH:/usr/local/cuda-8.0/bin:/usr/local/cuda/bin/"
 else
     isVoltron=1
